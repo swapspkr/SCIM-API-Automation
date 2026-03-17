@@ -1,0 +1,25 @@
+# Compiled class files
+*.class
+
+# Maven target folder
+/target/
+
+# Gradle build folder
+/build/
+
+# IDE files
+*.iml
+.idea/
+*.ipr
+*.iws
+*.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Secrets/config
+config.properties
