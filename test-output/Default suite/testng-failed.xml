@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.scim.test.AuthenticationTest">
+      <class name="com.scim.test.UserModelTest">
         <methods>
-          <include name="validateGetToken"/>
+          <include name="getUsers"/>
         </methods>
-      </class> <!-- com.scim.test.AuthenticationTest -->
+      </class> <!-- com.scim.test.UserModelTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
