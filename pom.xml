@@ -9,6 +9,7 @@
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		    <suite>src/test/resources/suite.xml</suite> 
 	</properties>
 	<build>
 		<plugins>
@@ -19,7 +20,7 @@
 				<configuration>
 					<suiteXmlFiles>
 						<suiteXmlFile>
-							${suite}.xml
+							${suite}
 						</suiteXmlFile>
 					</suiteXmlFiles>
 				</configuration>

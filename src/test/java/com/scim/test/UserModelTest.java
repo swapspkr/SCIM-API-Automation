@@ -1,7 +1,9 @@
 package com.scim.test;
 
 import java.util.Arrays;
+
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.scim.base.UserService;
@@ -14,6 +16,7 @@ import com.scim.utils.TokenManager;
 
 import io.restassured.response.Response;
 
+@Listeners(com.scim.listeners.TestListener.class)
 public class UserModelTest {
 
     private static String createdUserId; // store id for PUT
@@ -22,15 +25,14 @@ public class UserModelTest {
     private static String email;
     
     
-	@Test
+	@Test(description="Validate getUser API.")
 	public void getUsers() {
 		UserService userService = new UserService();
 		Response userResponse = userService.getUser(TokenManager.getAuthToken());
-		System.out.println(userResponse.asPrettyString());
 		Assert.assertEquals(userResponse.getStatusCode(), 200);
 	}
 
-	@Test
+	@Test(description="Validate user is created using POST User API.")
 	public void createUser() {
 		username = TestDataUtils.getUsername();
 		displayName = TestDataUtils.getDisplayName(username);
@@ -52,7 +54,7 @@ public class UserModelTest {
 		Assert.assertEquals(userResponse.getUserName(), username.toLowerCase());
 	}
 	
-	@Test(dependsOnMethods = "createUser")
+	@Test(description="Validate user update using User PUT API.",dependsOnMethods = "createUser")
 	public void putUser() {
 		 String updatedDisplayName = displayName + "_UPDATED";
 		 
@@ -70,9 +72,7 @@ public class UserModelTest {
 		UserService userService = new UserService();
 		Response response  = userService.putUser(TokenManager.getAuthToken(),putRequest,createdUserId);
 		UserPutResponse userResponse = response.as(UserPutResponse.class);
-
-		Assert.assertEquals(userResponse.getDisplayName(), updatedDisplayName);
-		
+		Assert.assertEquals(userResponse.getDisplayName(), updatedDisplayName);	
 		Assert.assertEquals(userResponse.getUserName(), username.toLowerCase());
 	}
 }

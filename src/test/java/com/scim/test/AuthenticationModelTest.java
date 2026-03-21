@@ -1,6 +1,7 @@
 package com.scim.test;
 
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import com.scim.base.AuthService;
@@ -9,11 +10,11 @@ import com.scim.models.response.LoginResponse;
 import com.scim.utils.ConfigReader;
 
 import io.restassured.response.Response;
-
+@Listeners(com.scim.listeners.TestListener.class)
 public class AuthenticationModelTest {
 
 	
-	@Test
+	@Test(description="Validate able to generate Auth token")
 	public void validateGetToken() {
         // Use ConfigReader for credentials instead of hardcoding
         String username = ConfigReader.get("PlatformApplicationUser");

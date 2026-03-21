@@ -1,13 +1,14 @@
 package com.scim.base;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.requestSpecification;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import com.scim.filters.LoggingFilters;
 import com.scim.models.request.LoginRequest;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -17,6 +18,10 @@ public class BaseService {
 	private static final String BASE_URI = "https://scimintegration.secureplatform.io/";
 	private RequestSpecification requestspecification;
 
+	static {
+        RestAssured.filters(new LoggingFilters());
+    }
+	
 	public BaseService() {
 		requestspecification = given().baseUri(BASE_URI);
 	}
