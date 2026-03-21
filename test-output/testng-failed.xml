@@ -5,7 +5,8 @@
     <classes>
       <class name="com.scim.test.UserModelTest">
         <methods>
-          <include name="getUsers"/>
+          <include name="putUser"/>
+          <include name="createUser"/>
         </methods>
       </class> <!-- com.scim.test.UserModelTest -->
     </classes>

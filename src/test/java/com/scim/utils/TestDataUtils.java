@@ -6,7 +6,7 @@ public class TestDataUtils {
 	private static final Random random = new Random();
 
 	public static String getUsername() {
-		return "SCIMCloudRestAssuredTestUser_" + random.nextInt(10000);
+		return "SCIMCloudRestAssuredTestUser_" + random.nextInt(10000)+"@test.com";
 	}
 
 	// displayName should be same as username

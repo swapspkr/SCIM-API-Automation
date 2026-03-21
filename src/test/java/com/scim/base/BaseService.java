@@ -14,7 +14,7 @@ import io.restassured.specification.RequestSpecification;
 
 public class BaseService {
 
-	private static final String BASE_URI = "https://scimcloud.secureplatform.io/";
+	private static final String BASE_URI = "https://scimintegration.secureplatform.io/";
 	private RequestSpecification requestspecification;
 
 	public BaseService() {
@@ -34,6 +34,11 @@ public class BaseService {
 	 //Generic POST request with JSON body 
 	protected Response postRequest(Object payload, String endpoint) {
 		return requestspecification.contentType(ContentType.JSON).body(payload).post(endpoint);
+	}
+	
+	 //Generic PUT request with JSON body 
+	protected Response putRequest(Object payload, String endpoint) {
+		return requestspecification.contentType(ContentType.JSON).body(payload).put(endpoint);
 	}
 
 	//Generic POST request with form parameters (x-www-form-urlencoded)	

@@ -7,9 +7,9 @@ import io.restassured.response.Response;
 public class AuthService extends BaseService{
    
 	/**
-     * Get OAuth2 token using client credentials
+     * Generate OAuth2 token using client credentials
      */
-    public Response getToken(LoginRequest payload) {
+    public Response generateToken(LoginRequest payload) {
         return postForm(payload,"/identity/api/oauth2/token/xpmplatform");
     }
 }

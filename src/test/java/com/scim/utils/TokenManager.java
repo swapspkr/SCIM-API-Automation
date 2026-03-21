@@ -41,7 +41,7 @@ public class TokenManager {
 		String password = ConfigReader.get("PlatformApplicationUserPassword");
 
 		AuthService authService = new AuthService();
-		Response response = authService.getToken(new LoginRequest(username, password));
+		Response response = authService.generateToken(new LoginRequest(username, password));
 
 		// validate token response
 		if (response.getStatusCode() != 200) {

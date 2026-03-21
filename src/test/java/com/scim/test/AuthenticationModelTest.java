@@ -22,7 +22,7 @@ public class AuthenticationModelTest {
 		LoginRequest loginRequest = new LoginRequest(username, password);
 		AuthService authService = new AuthService();
 		// replace with your actual credentials
-        Response response = authService.getToken(loginRequest);
+        Response response = authService.generateToken(loginRequest);
         
         LoginResponse loginResponse = response.as(LoginResponse.class);
         

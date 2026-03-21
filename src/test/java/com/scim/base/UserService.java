@@ -1,5 +1,6 @@
 package com.scim.base;
 
+import com.scim.models.request.UserPutRequest;
 import com.scim.models.request.UserRequest;
 
 import io.restassured.response.Response;
@@ -12,8 +13,14 @@ public class UserService extends BaseService{
 		setToken(token);
 		return getRequest(BASE_PATH+"/Users");
 	}
-	public Response createUser(String token,UserRequest payload) {
+	
+	public Response postUser(String token,UserRequest payload) {
 		setToken(token);
         return postRequest(payload,BASE_PATH+"/Users");
+    }
+	
+	public Response putUser(String token,UserPutRequest payload,String userId) {
+		setToken(token);
+        return putRequest(payload,BASE_PATH+"/Users/"+userId);
     }
 }
