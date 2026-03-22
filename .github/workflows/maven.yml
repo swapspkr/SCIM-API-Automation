@@ -35,7 +35,7 @@ jobs:
 
     # Step 5: Upload logs as artifact
     - name: Upload logs artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.2.2
       with:
         name: TestLogs
         path: logs/    # Replace with the actual folder path your project generates logs
