@@ -56,7 +56,7 @@ jobs:
           Run Number: ${{ github.run_number }}
           Branch: ${{ github.ref }}
           
-          Check logs for details: ${{ github.server_url }}/{{ github.repository }}/actions/runs/${{ github.run_id }}
+          Check logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
         to: "swapspkr@gmail.com"
         from: "swapspkr@gmail.com"
