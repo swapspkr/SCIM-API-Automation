@@ -88,4 +88,6 @@ public class UserModelTest {
 		Assert.assertEquals(userResponse.getUserName(), username.toLowerCase());
 		ExtentManager.pass("Username remains unchanged: " + username.toLowerCase());
 	}
+	
+	
 }

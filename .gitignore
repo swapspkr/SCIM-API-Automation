@@ -21,5 +21,8 @@ Thumbs.db
 # Logs
 *.log
 
+#ExtentReport
+*reports
+
 # Secrets/config
 config.properties

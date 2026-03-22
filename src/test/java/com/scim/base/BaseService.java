@@ -55,9 +55,7 @@ public class BaseService {
     // SET AUTH TOKEN
     // =========================
     public void setToken(String token) {
-        RequestSpecification spec = getRequestSpec();
-        spec.header("Authorization", "Bearer " + token);
-        requestSpec.set(spec);
+    	requestSpec.set(getRequestSpec().auth().oauth2(token));
     }
 
     // =========================
