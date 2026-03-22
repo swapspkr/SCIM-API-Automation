@@ -11,24 +11,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
-      - name: Checkout repo
-        uses: actions/checkout@v4
+    # 1️⃣ Checkout repo
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      # 2️⃣ Setup Java
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21.0.9'
-          distribution: 'temurin'
+    # 2️⃣ Set up JDK 21
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
 
-      # 3️⃣ Create config.properties from GitHub secrets
-      - name: Set config properties
-        run: |
-          mkdir -p src/test/resources
-          echo "PlatformApplicationUser=${{ secrets.SCIM_USERNAME }}" > src/test/resources/config.properties
-          echo "PlatformApplicationUserPassword=${{ secrets.SCIM_PASSWORD }}" >> src/test/resources/config.properties
+    # 3️⃣ Create config.properties with secrets
+    - name: Create config.properties
+      run: |
+        mkdir -p src/test/resources
+        echo "PlatformApplicationUser=${{ secrets.SCIM_USERNAME }}" > src/test/resources/config.properties
+        echo "PlatformApplicationUserPassword=${{ secrets.SCIM_PASSWORD }}" >> src/test/resources/config.properties
 
-      # 4️⃣ Build and run tests with Maven
-      - name: Build and run tests
-        run: mvn clean test -Dsuite=suite
+    # 4️⃣ Run Maven tests
+    - name: Run Maven tests
+      id: maven_test
+      run: |
+        mvn clean test -Dsuite=suite
+      continue-on-error: true
+
+    # 5️⃣ Send email with status
+    - name: Send Email with Test Status
+      if: always()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: "SCIM Automation Test Result - ${{ github.run_number }}"
+        body: |
+          Hello,
+
+          The SCIM Automation tests have completed.
+
+          Workflow: ${{ github.workflow }}
+          Status: ${{ job.status }}
+          Run Number: ${{ github.run_number }}
+          Branch: ${{ github.ref }}
+          
+          Check logs for details: ${{ github.server_url }}/{{ github.repository }}/actions/runs/${{ github.run_id }}
+
+        to: "swapspkr@gmail.com"
+        from: "swapspkr@gmail.com"
+        secure: true
