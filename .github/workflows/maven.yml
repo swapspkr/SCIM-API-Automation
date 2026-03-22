@@ -7,57 +7,61 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout repo
+    # Step 1: Checkout the code
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2️⃣ Set up JDK 21
+    # Step 2: Setup Java JDK
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '21.0.9'
         distribution: 'temurin'
 
-    # 3️⃣ Create config.properties with secrets
-    - name: Create config.properties
+    # Step 3: Create config.properties from GitHub Secrets
+    - name: Set config properties
       run: |
         mkdir -p src/test/resources
         echo "PlatformApplicationUser=${{ secrets.SCIM_USERNAME }}" > src/test/resources/config.properties
         echo "PlatformApplicationUserPassword=${{ secrets.SCIM_PASSWORD }}" >> src/test/resources/config.properties
 
-    # 4️⃣ Run Maven tests
-    - name: Run Maven tests
-      id: maven_test
-      run: |
-        mvn clean test -Dsuite=suite
-      continue-on-error: true
+    # Step 4: Run Maven tests
+    - name: Build and run tests
+      run: mvn clean test -Dsuite=suite -X
 
-    # 5️⃣ Send email with status
-    - name: Send Email with Test Status
-      if: always()
+    # Step 5: Upload logs as artifact
+    - name: Upload logs artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: TestLogs
+        path: logs/    # Replace with the actual folder path your project generates logs
+
+    # Step 6: Zip logs (optional if multiple files)
+    - name: Zip logs
+      run: zip -r logs.zip logs/
+
+    # Step 7: Send email with logs attached
+    - name: Send email notification with logs
+      if: always()  # Send even if tests fail
       uses: dawidd6/action-send-mail@v3
       with:
         server_address: smtp.gmail.com
         server_port: 465
-        username: ${{ secrets.EMAIL_USERNAME }}
-        password: ${{ secrets.EMAIL_PASSWORD }}
-        subject: "SCIM Automation Test Result - ${{ github.run_number }}"
+        username: ${{ secrets.EMAIL_USER }}
+        password: ${{ secrets.EMAIL_APP_PASSWORD }}
+        subject: "SCIM Automation Test Results - ${{ job.status }}"
         body: |
-          Hello,
+          The SCIM Automation workflow has completed.
 
-          The SCIM Automation tests have completed.
-
-          Workflow: ${{ github.workflow }}
           Status: ${{ job.status }}
-          Run Number: ${{ github.run_number }}
-          Branch: ${{ github.ref }}
-          
-          Check logs for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-        to: "swapspkr@gmail.com"
-        from: "swapspkr@gmail.com"
+          Check logs for details:
+          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        to: "recipient@example.com"
+        from: "your_email@gmail.com"
         secure: true
+        attachments: logs.zip
