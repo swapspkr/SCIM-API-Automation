@@ -18,6 +18,12 @@ jobs:
       with:
         java-version: '21.0.9'
         distribution: 'temurin'
+
+    - name: Set config properties
+        run: |
+          echo "PlatformApplicationUser=${{ secrets.SCIM_USERNAME }}" > src/test/resources/config.properties
+          echo "PlatformApplicationUserPassword=${{ secrets.SCIM_PASSWORD }}" >> src/test/resources/config.properties
+
         cache: maven
     - name: Build with Maven
       run: mvn clean test -Dsuite=suite -X
