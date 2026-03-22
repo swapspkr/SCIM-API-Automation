@@ -8,22 +8,27 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 21
-      uses: actions/setup-java@v4
-      with:
-        java-version: '21.0.9'
-        distribution: 'temurin'
+      # 1️⃣ Checkout the repository
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Set config properties
-      run: |
+      # 2️⃣ Setup Java
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21.0.9'
+          distribution: 'temurin'
+
+      # 3️⃣ Create config.properties from GitHub secrets
+      - name: Set config properties
+        run: |
+          mkdir -p src/test/resources
           echo "PlatformApplicationUser=${{ secrets.SCIM_USERNAME }}" > src/test/resources/config.properties
           echo "PlatformApplicationUserPassword=${{ secrets.SCIM_PASSWORD }}" >> src/test/resources/config.properties
 
-        cache: maven
-    - name: Build with Maven
-      run: mvn clean test -Dsuite=suite -X
+      # 4️⃣ Build and run tests with Maven
+      - name: Build and run tests
+        run: mvn clean test -Dsuite=suite
