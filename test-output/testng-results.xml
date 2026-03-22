@@ -1,31 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
+<testng-results ignored="0" total="3" passed="1" failed="1" skipped="1">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-03-21T17:39:12 UTC" name="Suite" finished-at="2026-03-21T17:39:25 UTC" duration-ms="13398">
+  <suite started-at="2026-03-22T11:49:18 UTC" name="Default suite" finished-at="2026-03-22T11:49:28 UTC" duration-ms="9447">
     <groups>
     </groups>
-    <test started-at="2026-03-21T17:39:12 UTC" name="Test" finished-at="2026-03-21T17:39:25 UTC" duration-ms="13398">
+    <test started-at="2026-03-22T11:49:18 UTC" name="Default test" finished-at="2026-03-22T11:49:28 UTC" duration-ms="9447">
       <class name="com.scim.test.UserModelTest">
-        <test-method signature="createUser()[pri:0, instance:com.scim.test.UserModelTest@5c5eefef]" started-at="2026-03-21T17:39:16 UTC" name="createUser" description="Validate user is created using POST User API." finished-at="2026-03-21T17:39:20 UTC" duration-ms="3902" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- createUser -->
-        <test-method signature="getUsers()[pri:0, instance:com.scim.test.UserModelTest@5c5eefef]" started-at="2026-03-21T17:39:20 UTC" name="getUsers" description="Validate getUser API." finished-at="2026-03-21T17:39:24 UTC" duration-ms="3934" status="PASS">
+        <test-method signature="getUsers()[pri:0, instance:com.scim.test.UserModelTest@5158b42f]" started-at="2026-03-22T11:49:19 UTC" name="getUsers" description="Validate getUser API." finished-at="2026-03-22T11:49:28 UTC" duration-ms="8835" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- getUsers -->
-        <test-method signature="putUser()[pri:0, instance:com.scim.test.UserModelTest@5c5eefef]" started-at="2026-03-21T17:39:24 UTC" name="putUser" description="Validate user update using User PUT API." finished-at="2026-03-21T17:39:25 UTC" depends-on-methods="com.scim.test.UserModelTest.createUser" duration-ms="1516" status="PASS">
+        <test-method signature="createUser()[pri:1, instance:com.scim.test.UserModelTest@5158b42f]" started-at="2026-03-22T11:49:28 UTC" name="createUser" description="Validate user is created using POST User API." finished-at="2026-03-22T11:49:28 UTC" duration-ms="174" status="FAIL">
+          <exception class="java.lang.IllegalStateException">
+            <message>
+              <![CDATA[Cannot parse object because no supported Content-Type was specified in response. Content-Type was 'text/html'.]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.IllegalStateException: Cannot parse object because no supported Content-Type was specified in response. Content-Type was 'text/html'.
+at java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)
+at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+at org.codehaus.groovy.reflection.CachedConstructor.invoke(CachedConstructor.java:73)
+at org.codehaus.groovy.runtime.callsite.ConstructorSite$ConstructorSiteNoUnwrapNoCoerce.callConstructor(ConstructorSite.java:108)
+at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCallConstructor(CallSiteArray.java:57)
+at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:263)
+at org.codehaus.groovy.runtime.callsite.AbstractCallSite.callConstructor(AbstractCallSite.java:277)
+at io.restassured.internal.mapping.ObjectMapping.deserialize(ObjectMapping.groovy:95)
+at io.restassured.internal.mapping.ObjectMapping$deserialize.call(Unknown Source)
+at io.restassured.internal.RestAssuredResponseOptionsGroovyImpl.as(RestAssuredResponseOptionsGroovyImpl.groovy:229)
+at io.restassured.internal.RestAssuredResponseOptionsImpl.as(RestAssuredResponseOptionsImpl.java:169)
+at com.scim.test.UserModelTest.createUser(UserModelTest.java:55)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.IllegalStateException -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createUser -->
+        <test-method signature="putUser()[pri:2, instance:com.scim.test.UserModelTest@5158b42f]" started-at="2026-03-22T11:49:28 UTC" name="putUser" description="Validate user update using User PUT API." finished-at="2026-03-22T11:49:28 UTC" depends-on-methods="com.scim.test.UserModelTest.createUser" duration-ms="0" status="SKIP">
+          <exception class="java.lang.Throwable">
+            <message>
+              <![CDATA[Method com.scim.test.UserModelTest.putUser() on instance com.scim.test.UserModelTest@5158b42f depends on not successfully finished methods 
+[com.scim.test.UserModelTest.createUser() on instance com.scim.test.UserModelTest@5158b42f]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.Throwable: Method com.scim.test.UserModelTest.putUser() on instance com.scim.test.UserModelTest@5158b42f depends on not successfully finished methods 
+[com.scim.test.UserModelTest.createUser() on instance com.scim.test.UserModelTest@5158b42f]
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:159)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.Throwable -->
           <reporter-output>
           </reporter-output>
         </test-method> <!-- putUser -->
       </class> <!-- com.scim.test.UserModelTest -->
-      <class name="com.scim.test.AuthenticationModelTest">
-        <test-method signature="validateGetToken()[pri:0, instance:com.scim.test.AuthenticationModelTest@2a798d51]" started-at="2026-03-21T17:39:12 UTC" name="validateGetToken" description="Validate able to generate Auth token" finished-at="2026-03-21T17:39:16 UTC" duration-ms="3918" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- validateGetToken -->
-      </class> <!-- com.scim.test.AuthenticationModelTest -->
-    </test> <!-- Test -->
-  </suite> <!-- Suite -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
 </testng-results>

@@ -7,54 +7,39 @@ import com.scim.models.response.LoginResponse;
 import io.restassured.response.Response;
 
 public class TokenManager {
-	private static String token;
-	private static long tokenTime;
+	private static final ThreadLocal<String> token = new ThreadLocal<>();
+	private static final ThreadLocal<Long> tokenTime = new ThreadLocal<>();
 
 	// Token valid for 50 mins (adjust based on API)
 	private static final long EXPIRY_TIME = 50 * 60 * 1000;
-
-	/*
-	 * private static String token; public Response response;
-	 * 
-	 * @Test public void getToken() { if (token == null) { response =
-	 * generateToken(); } Assert.assertEquals(response.statusCode(), 200); }
-	 * 
-	 * public Response generateToken() { response =
-	 * given().baseUri(baseURI).header("Content-Type",
-	 * "application/x-www-form-urlencoded") .formParam("grant_type",
-	 * "client_credentials").formParam("scope", "xpmheadless")
-	 * .formParam("client_id", "serviceqauser@scimcloud").formParam("client_secret",
-	 * "Cybage@123") .post("/identity/api/oauth2/token/xpmplatform");
-	 * 
-	 * System.out.println(response.asPrettyString()); return response; }
-	 */
-
+    String currentToken = token.get();
+    Long time = tokenTime.get();
+	
 	public static String getAuthToken() {
 
-		// reuse token if not expired
-		if (token != null && (System.currentTimeMillis() - tokenTime) < EXPIRY_TIME) {
-			return token;
-		}
+	    String currentToken = token.get();
+	    Long time = tokenTime.get();
 
-		// Use ConfigReader for credentials instead of hardcoding
-		String username = ConfigReader.get("PlatformApplicationUser");
-		String password = ConfigReader.get("PlatformApplicationUserPassword");
+	    if (currentToken != null && time != null &&
+	        (System.currentTimeMillis() - time) < EXPIRY_TIME) {
+	        return currentToken;
+	    }
 
-		AuthService authService = new AuthService();
-		Response response = authService.generateToken(new LoginRequest(username, password));
+	    String username = ConfigReader.get("PlatformApplicationUser");
+	    String password = ConfigReader.get("PlatformApplicationUserPassword");
 
-		// validate token response
-		if (response.getStatusCode() != 200) {
-			throw new RuntimeException("Failed to generate token: " + response.asPrettyString());
-		}
-		LoginResponse loginResponse = response.as(LoginResponse.class);
-		token = loginResponse.getAccess_token();
+	    AuthService authService = new AuthService();
+	    Response response = authService.generateToken(new LoginRequest(username, password));
 
-		// set tokenTime AFTER successful generation
-		tokenTime = System.currentTimeMillis();
+	    if (response.getStatusCode() != 200) {
+	        throw new RuntimeException("Failed to generate token: " + response.asPrettyString());
+	    }
 
-		System.out.println("Generated New Token: " + token);
+	    LoginResponse loginResponse = response.as(LoginResponse.class);
 
-		return token;
+	    token.set(loginResponse.getAccess_token());
+	    tokenTime.set(System.currentTimeMillis());
+
+	    return token.get();
 	}
 }

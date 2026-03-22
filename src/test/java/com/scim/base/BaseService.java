@@ -15,47 +15,78 @@ import io.restassured.specification.RequestSpecification;
 
 public class BaseService {
 
-	private static final String BASE_URI = "https://scimintegration.secureplatform.io/";
-	private RequestSpecification requestspecification;
+	  // ThreadLocal RequestSpecification for parallel execution
+    private static final ThreadLocal<RequestSpecification> requestSpec = new ThreadLocal<>();
 
-	static {
+    private static final String BASE_URI = "https://scimintegration.secureplatform.io/";
+
+    // Static block to attach filters globally
+    static {
         RestAssured.filters(new LoggingFilters());
     }
-	
-	public BaseService() {
-		requestspecification = given().baseUri(BASE_URI);
-	}
-	
-	// setToken
-	public void setToken(String token) {
-	    requestspecification.header("Authorization", "Bearer " + token);
-	}
-	
-	// Generic GET request 
-	protected Response getRequest(String endpoint) {
-		return requestspecification.get(endpoint);
-	}
 
-	 //Generic POST request with JSON body 
-	protected Response postRequest(Object payload, String endpoint) {
-		return requestspecification.contentType(ContentType.JSON).body(payload).post(endpoint);
-	}
-	
-	 //Generic PUT request with JSON body 
-	protected Response putRequest(Object payload, String endpoint) {
-		return requestspecification.contentType(ContentType.JSON).body(payload).put(endpoint);
-	}
+    // =========================
+    // GET OR INITIALIZE THREADLOCAL SPEC
+    // =========================
+    protected RequestSpecification getRequestSpec() {
+        RequestSpecification spec = requestSpec.get();
+        if (spec == null) {
+            spec = initRequestSpec();
+            requestSpec.set(spec);
+        }
+        return spec;
+    }
 
-	//Generic POST request with form parameters (x-www-form-urlencoded)	
-	protected Response postForm(LoginRequest payload, String endpoint) {
-		RequestSpecification req = requestspecification.contentType(ContentType.URLENC);
-		Map<String, String> formParams = new HashMap<>();
-		formParams.put("grant_type", "client_credentials");
-		formParams.put("scope", "xpmheadless");
-		formParams.put("client_id", payload.getUsername());
-		formParams.put("client_secret", payload.getPassword());
-		// add each key-value pair as form param
-		formParams.forEach(req::formParam);
-		return req.post(endpoint);
-	}
+    // =========================
+    // INIT NEW SPEC
+    // =========================
+    private RequestSpecification initRequestSpec() {
+        return RestAssured.given().baseUri(BASE_URI).contentType(ContentType.JSON).accept(ContentType.JSON);
+    }
+
+    // =========================
+    // CLEAR THREADLOCAL SPEC
+    // =========================
+    protected void clearRequestSpec() {
+        requestSpec.remove();
+    }
+
+    // =========================
+    // SET AUTH TOKEN
+    // =========================
+    public void setToken(String token) {
+        RequestSpecification spec = getRequestSpec();
+        spec.header("Authorization", "Bearer " + token);
+        requestSpec.set(spec);
+    }
+
+    // =========================
+    // GENERIC API METHODS
+    // =========================
+    protected Response getRequest(String endpoint) {
+        return getRequestSpec().get(endpoint);
+    }
+
+    protected Response postRequest(Object payload, String endpoint) {
+        return getRequestSpec().body(payload).post(endpoint);
+    }
+
+    protected Response putRequest(Object payload, String endpoint) {
+        return getRequestSpec().body(payload).put(endpoint);
+    }
+
+    protected Response postForm(LoginRequest payload, String endpoint) {
+        RequestSpecification req = RestAssured.given()
+                .baseUri(BASE_URI)
+                .contentType(ContentType.URLENC);
+
+        Map<String, String> formParams = new HashMap<>();
+        formParams.put("grant_type", "client_credentials");
+        formParams.put("scope", "xpmheadless");
+        formParams.put("client_id", payload.getUsername());
+        formParams.put("client_secret", payload.getPassword());
+
+        formParams.forEach(req::formParam);
+        return req.post(endpoint);
+    }
 }
