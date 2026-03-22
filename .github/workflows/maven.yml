@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Set config properties
-        run: |
+      run: |
           echo "PlatformApplicationUser=${{ secrets.SCIM_USERNAME }}" > src/test/resources/config.properties
           echo "PlatformApplicationUserPassword=${{ secrets.SCIM_PASSWORD }}" >> src/test/resources/config.properties
 
