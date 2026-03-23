@@ -2,30 +2,28 @@
 <testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-03-22T12:04:29 UTC" name="Suite" finished-at="2026-03-22T12:04:41 UTC" duration-ms="11386">
+  <suite started-at="2026-03-23T07:03:43 UTC" name="Default suite" finished-at="2026-03-23T07:03:58 UTC" duration-ms="15050">
     <groups>
     </groups>
-    <test started-at="2026-03-22T12:04:29 UTC" name="Test" finished-at="2026-03-22T12:04:41 UTC" duration-ms="11386">
+    <test started-at="2026-03-23T07:03:43 UTC" name="Default test" finished-at="2026-03-23T07:03:58 UTC" duration-ms="15050">
       <class name="com.scim.test.UserModelTest">
-        <test-method signature="getUsers()[pri:0, instance:com.scim.test.UserModelTest@7e07db1f]" started-at="2026-03-22T12:04:30 UTC" name="getUsers" description="Validate getUser API." finished-at="2026-03-22T12:04:35 UTC" duration-ms="5290" status="PASS">
+        <test-method signature="validategetUserAPI()[pri:0, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:43 UTC" name="validategetUserAPI" description="Validate getUser API." finished-at="2026-03-23T07:03:49 UTC" duration-ms="5318" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- getUsers -->
-        <test-method signature="createUser()[pri:1, instance:com.scim.test.UserModelTest@7e07db1f]" started-at="2026-03-22T12:04:35 UTC" name="createUser" description="Validate user is created using POST User API." finished-at="2026-03-22T12:04:38 UTC" duration-ms="3213" status="PASS">
+        </test-method> <!-- validategetUserAPI -->
+        <test-method signature="validatePostUserAPI()[pri:1, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:49 UTC" name="validatePostUserAPI" description="Validate user is created using POST User API." finished-at="2026-03-23T07:03:56 UTC" duration-ms="7190" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- createUser -->
-        <test-method signature="putUser()[pri:2, instance:com.scim.test.UserModelTest@7e07db1f]" started-at="2026-03-22T12:04:38 UTC" name="putUser" description="Validate user update using User PUT API." finished-at="2026-03-22T12:04:41 UTC" depends-on-methods="com.scim.test.UserModelTest.createUser" duration-ms="2561" status="PASS">
+        </test-method> <!-- validatePostUserAPI -->
+        <test-method signature="validateGetUserById()[pri:2, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:56 UTC" name="validateGetUserById" description="Validate get user response when pass by ID." finished-at="2026-03-23T07:03:56 UTC" depends-on-methods="com.scim.test.UserModelTest.validatePostUserAPI" duration-ms="333" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- putUser -->
+        </test-method> <!-- validateGetUserById -->
+        <test-method signature="validateputUserAPI()[pri:3, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:56 UTC" name="validateputUserAPI" description="Validate user update using User PUT API." finished-at="2026-03-23T07:03:58 UTC" depends-on-methods="com.scim.test.UserModelTest.validatePostUserAPI" duration-ms="1733" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- validateputUserAPI -->
       </class> <!-- com.scim.test.UserModelTest -->
-      <class name="com.scim.test.AuthenticationModelTest">
-        <test-method signature="validateGetToken()[pri:0, instance:com.scim.test.AuthenticationModelTest@5158b42f]" started-at="2026-03-22T12:04:30 UTC" name="validateGetToken" description="Validate able to generate Auth token" finished-at="2026-03-22T12:04:34 UTC" duration-ms="4911" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- validateGetToken -->
-      </class> <!-- com.scim.test.AuthenticationModelTest -->
-    </test> <!-- Test -->
-  </suite> <!-- Suite -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
 </testng-results>

@@ -1,6 +1,6 @@
 package com.scim.base;
 
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ public class BaseService {
     // INIT NEW SPEC
     // =========================
     private RequestSpecification initRequestSpec() {
-        return RestAssured.given().baseUri(BASE_URI).contentType(ContentType.JSON).accept(ContentType.JSON);
+        return given().baseUri(BASE_URI).contentType(ContentType.JSON).accept(ContentType.JSON);
     }
 
     // =========================

@@ -1,4 +1,4 @@
-package com.scim.test;
+package com.scim.models.response;
 
 import java.util.ArrayList;
 import java.util.List;
