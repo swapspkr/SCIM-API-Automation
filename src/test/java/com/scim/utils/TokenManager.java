@@ -17,13 +17,13 @@ public class TokenManager {
 	
 	public static String getAuthToken() {
 
-	    String currentToken = token.get();
-	    Long time = tokenTime.get();
+	    //String currentToken = token.get();
+	    //Long time = tokenTime.get();
 
-	    if (currentToken != null && time != null &&
-	        (System.currentTimeMillis() - time) < EXPIRY_TIME) {
-	        return currentToken;
-	    }
+		/*
+		 * if (currentToken != null && time != null && (System.currentTimeMillis() -
+		 * time) < EXPIRY_TIME) { return currentToken; }
+		 */
 
 	    String username = ConfigReader.get("PlatformApplicationUser");
 	    String password = ConfigReader.get("PlatformApplicationUserPassword");

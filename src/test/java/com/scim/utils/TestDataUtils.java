@@ -15,7 +15,7 @@ public class TestDataUtils {
 	}
 
 	public static String getEmail(String username) {
-		return username.toLowerCase() + "@test.com";
+		return username.toLowerCase();
 	}
 
 	public static String getPassword() {

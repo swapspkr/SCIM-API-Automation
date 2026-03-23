@@ -3,6 +3,9 @@ package com.scim.models.response;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponse {
 
 	private List<String> schemas;

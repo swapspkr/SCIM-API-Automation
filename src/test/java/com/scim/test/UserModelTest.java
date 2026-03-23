@@ -13,6 +13,8 @@ import com.scim.models.request.UserRequest;
 import com.scim.models.request.UserRequest.Email;
 import com.scim.models.response.UserPutResponse;
 import com.scim.models.response.UserResponse;
+import com.scim.models.response.UsersResourceResponse;
+import com.scim.utils.ConfigReader;
 import com.scim.utils.ExtentManager;
 import com.scim.utils.TestDataUtils;
 import com.scim.utils.TokenManager;
@@ -41,7 +43,7 @@ public class UserModelTest {
 		String responseBody = response.getBody().asString();
 		ExtentManager.info("Response body is not empty.");
 		softAssert.assertFalse(responseBody.isEmpty(), "Response body should not be empty");
-		
+
 		// Logging
 		ExtentManager.info("Validating response status...");
 		softAssert.assertEquals(response.getStatusCode(), 200);
@@ -77,24 +79,24 @@ public class UserModelTest {
 		ExtentManager.pass("Username validated successfully: " + username.toLowerCase());
 	}
 
-	@Test(description = "Validate get user response when pass by ID.",dependsOnMethods = "validatePostUserAPI", priority = 2)
+	@Test(description = "Validate get user response when pass by ID.", dependsOnMethods = "validatePostUserAPI", priority = 2)
 	public void validateGetUserById() {
 		SoftAssert softAssert = new SoftAssert();
-		
+
 		ExtentManager.info("Starting Get UserById API test...");
 		userService = new UserService();
 		response = userService.getUserById(TokenManager.getAuthToken(), createdUserId);
-		
+
 		String responseBody = response.getBody().asString();
 		ExtentManager.info("Response body is not empty.");
 		softAssert.assertFalse(responseBody.isEmpty(), "Response body should not be empty");
-	
+
 		userResponse = response.as(UserResponse.class);
 		softAssert.assertNotNull(userResponse.getId(), "id should not be null");
-	    ExtentManager.info("id is not null: " + userResponse.getId());
-		
+		ExtentManager.info("id is not null: " + userResponse.getId());
+
 		softAssert.assertNotNull(userResponse.getUserName(), "userName should not be null");
-	    ExtentManager.info("userName is not null: " + userResponse.getUserName());	    
+		ExtentManager.info("userName is not null: " + userResponse.getUserName());
 
 		try {
 			softAssert.assertEquals(userResponse.getId(), createdUserId);
@@ -103,7 +105,7 @@ public class UserModelTest {
 			ExtentManager.logError("Validation Failed . Failed to getUser by ID ..");
 			e.printStackTrace();
 		}
-	    softAssert.assertAll();
+		softAssert.assertAll();
 	}
 
 	@Test(description = "Validate user update using User PUT API.", dependsOnMethods = "validatePostUserAPI", priority = 3)
@@ -128,6 +130,32 @@ public class UserModelTest {
 		ExtentManager.pass("DisplayName updated successfully: " + updatedDisplayName);
 		Assert.assertEquals(userResponse.getUserName(), username.toLowerCase());
 		ExtentManager.pass("Username remains unchanged: " + username.toLowerCase());
+	}
+
+	@Test(description = "validate user response with count", priority = 4)
+	public void validateUserWithCount() {
+		ExtentManager.info("Starting get User API with filter count...");
+		UserService userService = new UserService();
+		response = userService.getUserWithCount(TokenManager.getAuthToken());
+		Assert.assertEquals(response.getStatusCode(), 200);
+		UsersResourceResponse userResources = response.as(UsersResourceResponse.class);
+		System.out.println(userResources.getTotalResults());
+
+		// Validate that no user ID contains the unwanted enterprise URN
+		String unwantedURN = ConfigReader.get("userUrn");
+
+		boolean anyInvalid = userResources.getResources().stream().map(UserResponse::getId)
+				.anyMatch(id -> id.contains(unwantedURN));
+
+		// Assert no IDs contain the unwanted URN
+		try {
+			Assert.assertFalse(anyInvalid, "Some user IDs contain the unwanted enterprise URN!");
+		} catch (AssertionError e) {
+			// Log failure to ExtentManager
+			ExtentManager.fail("One or more user IDs contain the unwanted enterprise URN!");
+			// Re-throw to let the test fail
+			throw e;
+		}
 	}
 
 }

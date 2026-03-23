@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
+<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-03-23T07:03:43 UTC" name="Default suite" finished-at="2026-03-23T07:03:58 UTC" duration-ms="15050">
+  <suite started-at="2026-03-23T12:19:34 UTC" name="Default suite" finished-at="2026-03-23T12:19:43 UTC" duration-ms="9121">
     <groups>
     </groups>
-    <test started-at="2026-03-23T07:03:43 UTC" name="Default test" finished-at="2026-03-23T07:03:58 UTC" duration-ms="15050">
+    <test started-at="2026-03-23T12:19:34 UTC" name="Default test" finished-at="2026-03-23T12:19:43 UTC" duration-ms="9121">
       <class name="com.scim.test.UserModelTest">
-        <test-method signature="validategetUserAPI()[pri:0, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:43 UTC" name="validategetUserAPI" description="Validate getUser API." finished-at="2026-03-23T07:03:49 UTC" duration-ms="5318" status="PASS">
+        <test-method signature="validateUserWithCount()[pri:4, instance:com.scim.test.UserModelTest@35cabb2a]" started-at="2026-03-23T12:19:35 UTC" name="validateUserWithCount" description="validate user response with count" finished-at="2026-03-23T12:19:43 UTC" duration-ms="8785" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- validategetUserAPI -->
-        <test-method signature="validatePostUserAPI()[pri:1, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:49 UTC" name="validatePostUserAPI" description="Validate user is created using POST User API." finished-at="2026-03-23T07:03:56 UTC" duration-ms="7190" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- validatePostUserAPI -->
-        <test-method signature="validateGetUserById()[pri:2, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:56 UTC" name="validateGetUserById" description="Validate get user response when pass by ID." finished-at="2026-03-23T07:03:56 UTC" depends-on-methods="com.scim.test.UserModelTest.validatePostUserAPI" duration-ms="333" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- validateGetUserById -->
-        <test-method signature="validateputUserAPI()[pri:3, instance:com.scim.test.UserModelTest@595b007d]" started-at="2026-03-23T07:03:56 UTC" name="validateputUserAPI" description="Validate user update using User PUT API." finished-at="2026-03-23T07:03:58 UTC" depends-on-methods="com.scim.test.UserModelTest.validatePostUserAPI" duration-ms="1733" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- validateputUserAPI -->
+        </test-method> <!-- validateUserWithCount -->
       </class> <!-- com.scim.test.UserModelTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->

@@ -19,6 +19,11 @@ public class UserService extends BaseService{
 		return getRequest(BASE_PATH+"/Users/"+userId);
 	}
 	
+	public Response getUserWithCount(String token) {
+		setToken(token);
+		return getRequest(BASE_PATH+"/Users"+"?Count=100&StartIndex=1");
+	}
+	
 	public Response postUser(String token,UserRequest payload) {
 		setToken(token);
         return postRequest(payload,BASE_PATH+"/Users");

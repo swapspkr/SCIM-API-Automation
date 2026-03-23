@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class ConfigReader {
 
-	 private static final String filepath = System.getProperty("user.dir")+File.separator + "/src/test/resources/config.properties";
+	 private static final String filepath = System.getProperty("user.dir")+"/src/test/resources/config.properties";
 	 private static Properties properties;
 
 	    static {

@@ -1,0 +1,507 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- Pure SVG diagram - no Mermaid dependency -->
+  <title>SCIM API Automation - Architecture</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f1f5f9;
+      font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+      min-height: 100vh;
+      padding: 32px 20px 52px;
+    }
+
+    .page-header { text-align: center; margin-bottom: 22px; }
+    .page-header h1 {
+      font-size: 1.4rem; font-weight: 700; color: #0f172a; letter-spacing: .01em;
+    }
+    .page-header p { margin-top: 5px; font-size: .8rem; color: #64748b; }
+
+    .toolbar {
+      display: flex; justify-content: center;
+      gap: 10px; margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 20px; border: none; border-radius: 7px;
+      font-size: .82rem; font-weight: 600; cursor: pointer;
+      transition: filter .18s, transform .1s;
+    }
+    .btn:hover  { filter: brightness(1.12); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-svg  { background: #dc2626; color: #fff; }
+    .btn-png  { background: #2563eb; color: #fff; }
+    .btn-pdf  { background: #7c3aed; color: #fff; }
+
+    .diagram-wrap {
+      max-width: 1020px; margin: 0 auto;
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.10);
+      padding: 28px 24px;
+      overflow-x: auto;
+    }
+
+    #arch-svg { display: block; width: 100%; height: auto; }
+
+    footer {
+      text-align: center; margin-top: 28px;
+      font-size: .74rem; color: #94a3b8;
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .toolbar, footer { display: none; }
+      .diagram-wrap { box-shadow: none; padding: 0; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>SCIM API Automation &mdash; Framework Architecture</h1>
+  <p>RestAssured 5.3 &nbsp;&middot;&nbsp; TestNG 7.10 &nbsp;&middot;&nbsp; Jackson 2.18 &nbsp;&middot;&nbsp; ExtentReports &nbsp;&middot;&nbsp; GitHub Actions &nbsp;&middot;&nbsp; Java 21</p>
+</div>
+
+<div class="toolbar">
+  <button class="btn btn-svg" onclick="downloadSVG()">&#x2B07; Download SVG</button>
+  <button class="btn btn-png" onclick="downloadPNG()">&#x2B07; Download PNG</button>
+  <button class="btn btn-pdf" onclick="window.print()">&#x1F5A8; Save as PDF</button>
+</div>
+
+<div class="diagram-wrap">
+<svg id="arch-svg" xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 980 1295" width="980" height="1295">
+
+  <defs>
+    <!-- Arrow marker -->
+    <marker id="arr" markerWidth="10" markerHeight="7"
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+    <!-- Drop shadow filter -->
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#00000018"/>
+    </filter>
+  </defs>
+
+  <!-- â•â•â•â• Background â•â•â•â• -->
+  <rect width="980" height="1295" fill="#f8fafc" rx="16"/>
+
+  <!-- Title -->
+  <text x="490" y="30" text-anchor="middle"
+        font-size="16" font-weight="700" fill="#0f172a"
+        font-family="Segoe UI,system-ui,sans-serif">
+    SCIM API Automation - Framework Architecture
+  </text>
+  <text x="490" y="50" text-anchor="middle"
+        font-size="11" fill="#64748b"
+        font-family="Segoe UI,system-ui,sans-serif">
+    RestAssured 5.3  |  TestNG 7.10  |  Jackson 2.18  |  ExtentReports  |  GitHub Actions  |  Java 21
+  </text>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 1 â€” CI / CD   y=65  h=115
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="65" width="930" height="115" rx="14"
+        fill="#fff1f2" stroke="#f43f5e" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <!-- Badge -->
+  <rect x="25" y="65" width="192" height="26" rx="7" fill="#f43f5e"/>
+  <text x="121" y="82" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">CI / CD  |  GitHub Actions</text>
+
+  <!-- Node: GitHub Secrets -->
+  <rect x="48" y="100" width="206" height="68" rx="9"
+        fill="#fff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="151" y="122" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#9f1239" font-family="Segoe UI,sans-serif">GitHub Secrets</text>
+  <text x="151" y="139" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">SCIM_USERNAME / SCIM_PASSWORD</text>
+  <text x="151" y="155" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Injected as env vars at runtime</text>
+
+  <!-- Node: Workflow YAML -->
+  <rect x="286" y="100" width="206" height="68" rx="9"
+        fill="#fff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="389" y="122" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#9f1239" font-family="Segoe UI,sans-serif">Workflow YAML</text>
+  <text x="389" y="139" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">push trigger â†’ checkout code</text>
+  <text x="389" y="155" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">mvn test â†’ attach artifacts</text>
+
+  <!-- Node: Email Notification -->
+  <rect x="524" y="100" width="206" height="68" rx="9"
+        fill="#fff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="627" y="122" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#9f1239" font-family="Segoe UI,sans-serif">Email Notification</text>
+  <text x="627" y="139" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Send results on completion</text>
+  <text x="627" y="155" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Attach Extent HTML report</text>
+
+  <!-- Arrow 1â†’2 -->
+  <line x1="490" y1="180" x2="490" y2="198"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 2 â€” Configuration   y=200  h=90
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="200" width="930" height="90" rx="14"
+        fill="#fffbeb" stroke="#f59e0b" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="200" width="148" height="26" rx="7" fill="#f59e0b"/>
+  <text x="99" y="217" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Configuration</text>
+
+  <!-- Node: config.properties -->
+  <rect x="160" y="228" width="250" height="54" rx="9"
+        fill="#fff" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="285" y="250" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#78350f" font-family="Segoe UI,sans-serif">config.properties</text>
+  <text x="285" y="268" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">baseURI Â· credentials (placeholder values)</text>
+
+  <!-- Node: ConfigReader -->
+  <rect x="455" y="228" width="250" height="54" rx="9"
+        fill="#fff" stroke="#fde68a" stroke-width="1.2"/>
+  <text x="580" y="250" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#78350f" font-family="Segoe UI,sans-serif">ConfigReader</text>
+  <text x="580" y="268" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Static Properties loader Â· get(key)</text>
+
+  <!-- Arrow 2â†’3 -->
+  <line x1="490" y1="290" x2="490" y2="308"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 3 â€” Core Utilities   y=310  h=120
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="310" width="930" height="120" rx="14"
+        fill="#eff6ff" stroke="#3b82f6" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="310" width="132" height="26" rx="7" fill="#3b82f6"/>
+  <text x="91" y="327" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Core Utilities</text>
+
+  <!-- Node: TokenManager -->
+  <rect x="46" y="345" width="206" height="74" rx="9"
+        fill="#fff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="149" y="367" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#1e40af" font-family="Segoe UI,sans-serif">TokenManager</text>
+  <text x="149" y="384" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">ThreadLocal token cache</text>
+  <text x="149" y="400" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">50 min TTL Â· OAuth2 client creds</text>
+
+  <!-- Node: TestDataUtils -->
+  <rect x="282" y="345" width="206" height="74" rx="9"
+        fill="#fff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="385" y="367" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#1e40af" font-family="Segoe UI,sans-serif">TestDataUtils</text>
+  <text x="385" y="384" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Random username / email</text>
+  <text x="385" y="400" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">password generation</text>
+
+  <!-- Node: ExtentManager -->
+  <rect x="518" y="345" width="206" height="74" rx="9"
+        fill="#fff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="621" y="367" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#1e40af" font-family="Segoe UI,sans-serif">ExtentManager</text>
+  <text x="621" y="384" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">ThreadLocal ExtentTest</text>
+  <text x="621" y="400" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Synchronized init + flush</text>
+
+  <!-- Node: Log4j2 -->
+  <rect x="752" y="345" width="178" height="74" rx="9"
+        fill="#fff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="841" y="367" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#1e40af" font-family="Segoe UI,sans-serif">Log4j2</text>
+  <text x="841" y="384" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">File + Console appenders</text>
+  <text x="841" y="400" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">log4j2.xml config</text>
+
+  <!-- Arrow 3â†’4 -->
+  <line x1="490" y1="430" x2="490" y2="448"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 4 â€” Cross-Cutting / Filter   y=450  h=90
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="450" width="930" height="90" rx="14"
+        fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="450" width="198" height="26" rx="7" fill="#8b5cf6"/>
+  <text x="124" y="467" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Cross-Cutting  |  Filter</text>
+
+  <rect x="155" y="477" width="668" height="54" rx="9"
+        fill="#fff" stroke="#ddd6fe" stroke-width="1.2"/>
+  <text x="489" y="499" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#4c1d95" font-family="Segoe UI,sans-serif">
+    LoggingFilters  â€”  implements RestAssured Filter
+  </text>
+  <text x="489" y="517" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">
+    Intercepts every HTTP call Â· Masks Authorization header + tokens Â· Logs request / response / time Â· Marks pass/fail
+  </text>
+
+  <!-- Arrow 4â†’5 -->
+  <line x1="490" y1="540" x2="490" y2="558"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 5 â€” Base Service   y=560  h=90
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="560" width="930" height="90" rx="14"
+        fill="#f0fdfa" stroke="#14b8a6" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="560" width="136" height="26" rx="7" fill="#14b8a6"/>
+  <text x="93" y="577" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Base Service</text>
+
+  <rect x="155" y="588" width="668" height="54" rx="9"
+        fill="#fff" stroke="#99f6e4" stroke-width="1.2"/>
+  <text x="489" y="610" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#134e4a" font-family="Segoe UI,sans-serif">BaseService</text>
+  <text x="489" y="628" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">
+    ThreadLocal RequestSpecification Â· setToken() Â· GET / POST / PUT / postForm Â· Registers LoggingFilters globally (static block)
+  </text>
+
+  <!-- Arrow 5â†’6 -->
+  <line x1="490" y1="650" x2="490" y2="668"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 6 â€” Domain Services   y=670  h=98
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="670" width="930" height="98" rx="14"
+        fill="#ecfeff" stroke="#0891b2" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="670" width="162" height="26" rx="7" fill="#0891b2"/>
+  <text x="106" y="687" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Domain Services</text>
+
+  <!-- Node: AuthService -->
+  <rect x="175" y="698" width="276" height="62" rx="9"
+        fill="#fff" stroke="#a5f3fc" stroke-width="1.2"/>
+  <text x="313" y="720" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#164e63" font-family="Segoe UI,sans-serif">AuthService</text>
+  <text x="313" y="737" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">generateToken() â†’ /oauth2/token</text>
+  <text x="313" y="752" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">extends BaseService Â· postForm()</text>
+
+  <!-- Node: UserService -->
+  <rect x="495" y="698" width="276" height="62" rx="9"
+        fill="#fff" stroke="#a5f3fc" stroke-width="1.2"/>
+  <text x="633" y="720" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#164e63" font-family="Segoe UI,sans-serif">UserService</text>
+  <text x="633" y="737" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">getUser Â· getUserById Â· postUser Â· putUser</text>
+  <text x="633" y="752" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">/scim/v2/Users Â· extends BaseService</text>
+
+  <!-- Arrow 6â†’7 -->
+  <line x1="490" y1="768" x2="490" y2="786"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 7 â€” Model Layer   y=788  h=98
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="788" width="930" height="98" rx="14"
+        fill="#f8fafc" stroke="#64748b" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="788" width="198" height="26" rx="7" fill="#64748b"/>
+  <text x="124" y="805" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Model Layer  |  Jackson POJOs</text>
+
+  <!-- Node: Request Models -->
+  <rect x="175" y="816" width="276" height="62" rx="9"
+        fill="#fff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="313" y="838" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#1e293b" font-family="Segoe UI,sans-serif">Request Models</text>
+  <text x="313" y="855" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">LoginRequest Â· UserRequest (Builder)</text>
+  <text x="313" y="870" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">UserPutRequest (Builder)</text>
+
+  <!-- Node: Response Models -->
+  <rect x="495" y="816" width="276" height="62" rx="9"
+        fill="#fff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="633" y="838" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#1e293b" font-family="Segoe UI,sans-serif">Response Models</text>
+  <text x="633" y="855" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">LoginResponse Â· UserResponse</text>
+  <text x="633" y="870" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">UserPutResponse Â· deserialized via Jackson</text>
+
+  <!-- Arrow 7â†’8 -->
+  <line x1="490" y1="886" x2="490" y2="904"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 8 â€” Test Layer   y=906  h=110
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="906" width="930" height="110" rx="14"
+        fill="#faf5ff" stroke="#9333ea" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="906" width="176" height="26" rx="7" fill="#9333ea"/>
+  <text x="113" y="923" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Test Layer  |  TestNG</text>
+
+  <!-- Node: AuthenticationModelTest -->
+  <rect x="46" y="940" width="270" height="67" rx="9"
+        fill="#fff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="181" y="962" text-anchor="middle" font-size="11" font-weight="600"
+        fill="#581c87" font-family="Segoe UI,sans-serif">AuthenticationModelTest</text>
+  <text x="181" y="979" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">validateGetToken()</text>
+  <text x="181" y="995" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">@Listeners(TestListener.class)</text>
+
+  <!-- Node: UserModelTest -->
+  <rect x="352" y="940" width="270" height="67" rx="9"
+        fill="#fff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="487" y="962" text-anchor="middle" font-size="11" font-weight="600"
+        fill="#581c87" font-family="Segoe UI,sans-serif">UserModelTest</text>
+  <text x="487" y="979" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">GET Â· POST Â· GET-by-ID Â· PUT</text>
+  <text x="487" y="995" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">dependsOnMethods chain</text>
+
+  <!-- Node: TestListener -->
+  <rect x="658" y="940" width="270" height="67" rx="9"
+        fill="#fff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="793" y="962" text-anchor="middle" font-size="11" font-weight="600"
+        fill="#581c87" font-family="Segoe UI,sans-serif">TestListener</text>
+  <text x="793" y="979" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">ITestListener lifecycle hooks</text>
+  <text x="793" y="995" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">onStart Â· onFinish Â· pass/fail</text>
+
+  <!-- Arrow 8â†’9 -->
+  <line x1="490" y1="1016" x2="490" y2="1034"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 9 â€” Reporting   y=1036  h=105
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="1036" width="930" height="105" rx="14"
+        fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="1036" width="118" height="26" rx="7" fill="#16a34a"/>
+  <text x="84" y="1053" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">Reporting</text>
+
+  <!-- Node: ExtentSparkReporter -->
+  <rect x="46" y="1070" width="270" height="62" rx="9"
+        fill="#fff" stroke="#bbf7d0" stroke-width="1.2"/>
+  <text x="181" y="1091" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#14532d" font-family="Segoe UI,sans-serif">ExtentSparkReporter</text>
+  <text x="181" y="1108" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Dark theme Â· timestamped HTML file</text>
+  <text x="181" y="1124" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">System info Â· pass/fail by method</text>
+
+  <!-- Node: Log4j2 Logger -->
+  <rect x="352" y="1070" width="270" height="62" rx="9"
+        fill="#fff" stroke="#bbf7d0" stroke-width="1.2"/>
+  <text x="487" y="1091" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#14532d" font-family="Segoe UI,sans-serif">Log4j2 Logger</text>
+  <text x="487" y="1108" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">File + Console appenders</text>
+  <text x="487" y="1124" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Structured logs Â· log4j2.xml</text>
+
+  <!-- Node: Email -->
+  <rect x="658" y="1070" width="270" height="62" rx="9"
+        fill="#fff" stroke="#bbf7d0" stroke-width="1.2"/>
+  <text x="793" y="1091" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#14532d" font-family="Segoe UI,sans-serif">Email Notification</text>
+  <text x="793" y="1108" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Send on pass / fail</text>
+  <text x="793" y="1124" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">Attach Extent HTML artifact</text>
+
+  <!-- Arrow 9â†’10 -->
+  <line x1="490" y1="1141" x2="490" y2="1159"
+        stroke="#94a3b8" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+       LAYER 10 â€” External System   y=1161  h=90
+  â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <rect x="25" y="1161" width="930" height="90" rx="14"
+        fill="#fff1f2" stroke="#f43f5e" stroke-width="1.8" filter="url(#card-shadow)"/>
+  <rect x="25" y="1161" width="166" height="26" rx="7" fill="#f43f5e"/>
+  <text x="108" y="1178" text-anchor="middle" font-size="11" font-weight="700"
+        fill="#fff" font-family="Segoe UI,sans-serif">External System</text>
+
+  <rect x="155" y="1189" width="668" height="54" rx="9"
+        fill="#fff" stroke="#fecdd3" stroke-width="1.2"/>
+  <text x="489" y="1211" text-anchor="middle" font-size="12" font-weight="600"
+        fill="#881337" font-family="Segoe UI,sans-serif">
+    SCIM API  â€”  secureplatform.io
+  </text>
+  <text x="489" y="1229" text-anchor="middle" font-size="10" fill="#6b7280"
+        font-family="Segoe UI,sans-serif">
+    /identity/api/oauth2/token/xpmplatform  Â·  /scim/v2/Users  Â·  JSON responses deserialized by Jackson
+  </text>
+
+</svg>
+</div>
+
+<footer>
+  SCIM RestAssured Automation Framework &nbsp;&middot;&nbsp; Architecture Diagram &nbsp;&middot;&nbsp; March 2026
+</footer>
+
+<script>
+  function getSVG() { return document.getElementById('arch-svg'); }
+
+  function downloadSVG() {
+    const svg = getSVG();
+    let src = new XMLSerializer().serializeToString(svg);
+    // Ensure standalone SVG has XML declaration
+    src = '<?xml version="1.0" encoding="utf-8"?>\n' + src;
+    const a = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(new Blob([src], { type: 'image/svg+xml;charset=utf-8' })),
+      download: 'SCIM-Architecture.svg'
+    });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }
+
+  function downloadPNG() {
+    const svg = getSVG();
+    const scale = 2;
+    const W = 980 * scale;
+    const H = 1295 * scale;
+
+    const src = new XMLSerializer().serializeToString(svg);
+    const svgBlob = new Blob([src], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, W, H);
+      ctx.drawImage(img, 0, 0, W, H);
+      URL.revokeObjectURL(url);
+      const a = Object.assign(document.createElement('a'), {
+        href: canvas.toDataURL('image/png'),
+        download: 'SCIM-Architecture.png'
+      });
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    };
+    img.src = url;
+  }
+</script>
+</body>
+</html>
