@@ -7,39 +7,51 @@ import com.scim.models.response.LoginResponse;
 import io.restassured.response.Response;
 
 public class TokenManager {
-	private static final ThreadLocal<String> token = new ThreadLocal<>();
-	private static final ThreadLocal<Long> tokenTime = new ThreadLocal<>();
 
-	// Token valid for 50 mins (adjust based on API)
+	private static volatile String sharedToken;
+	private static volatile long tokenTime;
+
+	// Token valid for 50 mins
 	private static final long EXPIRY_TIME = 50 * 60 * 1000;
-    String currentToken = token.get();
-    Long time = tokenTime.get();
-	
+
+	private static final Object lock = new Object();
+
 	public static String getAuthToken() {
 
-	    //String currentToken = token.get();
-	    //Long time = tokenTime.get();
+		// Fast path (no locking)
+		if (sharedToken != null && (System.currentTimeMillis() - tokenTime) < EXPIRY_TIME) {
+			return sharedToken;
+		}
 
-		/*
-		 * if (currentToken != null && time != null && (System.currentTimeMillis() -
-		 * time) < EXPIRY_TIME) { return currentToken; }
-		 */
+		// Lock only when needed
+		synchronized (lock) {
 
-	    String username = ConfigReader.get("PlatformApplicationUser");
-	    String password = ConfigReader.get("PlatformApplicationUserPassword");
+			// Double-check after acquiring lock
+			if (sharedToken != null && (System.currentTimeMillis() - tokenTime) < EXPIRY_TIME) {
+				return sharedToken;
+			}
 
-	    AuthService authService = new AuthService();
-	    Response response = authService.generateToken(new LoginRequest(username, password));
+			// Generate new token
+			sharedToken = generateNewToken();
+			tokenTime = System.currentTimeMillis();
 
-	    if (response.getStatusCode() != 200) {
-	        throw new RuntimeException("Failed to generate token: " + response.asPrettyString());
-	    }
+			return sharedToken;
+		}
+	}
 
-	    LoginResponse loginResponse = response.as(LoginResponse.class);
+	private static String generateNewToken() {
 
-	    token.set(loginResponse.getAccess_token());
-	    tokenTime.set(System.currentTimeMillis());
+		String username = ConfigReader.get("PlatformApplicationUser");
+		String password = ConfigReader.get("PlatformApplicationUserPassword");
 
-	    return token.get();
+		AuthService authService = new AuthService();
+		Response response = authService.generateToken(new LoginRequest(username, password));
+
+		if (response.getStatusCode() != 200) {
+			throw new RuntimeException("Failed to generate token: " + response.asPrettyString());
+		}
+
+		LoginResponse loginResponse = response.as(LoginResponse.class);
+		return loginResponse.getAccess_token();
 	}
 }
